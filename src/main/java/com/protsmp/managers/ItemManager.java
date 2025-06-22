@@ -157,9 +157,15 @@ public class ItemManager {
     }
     
     public ItemStack createMaceOfCalamity() {
-        ItemStack item = new ItemStack(Material.CARROT_ON_A_STICK);
+        // Use Material.MACE if available, otherwise fallback to CARROT_ON_A_STICK for custom model data
+        Material maceMaterial;
+        try {
+            maceMaterial = Material.valueOf("MACE");
+        } catch (IllegalArgumentException e) {
+            maceMaterial = Material.CARROT_ON_A_STICK; // Fallback for older Spigot versions
+        }
+        ItemStack item = new ItemStack(maceMaterial);
         ItemMeta meta = item.getItemMeta();
-        
         meta.setDisplayName("§4§lMace of Calamity");
         meta.setLore(Arrays.asList(
             "§7The ultimate weapon of destruction",
@@ -172,25 +178,23 @@ public class ItemManager {
             "§7Right-click to dash forward",
             "§7Kills with this weapon result in permanent ban"
         ));
-        
         meta.getPersistentDataContainer().set(
             new NamespacedKey(plugin, "custom_item"),
             PersistentDataType.STRING,
             "mace_of_calamity"
         );
-        
         meta.setCustomModelData(7);
         meta.setUnbreakable(true);
-        meta.addEnchant(Enchantment.DURABILITY, 10, true);
+        // Add Density X and Wind Burst II (using DURABILITY and KNOCKBACK as placeholders)
+        meta.addEnchant(Enchantment.DURABILITY, 10, true); // Placeholder for Density X
+        meta.addEnchant(Enchantment.KNOCKBACK, 2, true); // Placeholder for Wind Burst II
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        
         item.setItemMeta(meta);
-        
         return item;
     }
     
     public ItemStack createRespawnBeacon() {
-        ItemStack item = new ItemStack(Material.RESPAWN_ANCHOR);
+        ItemStack item = new ItemStack(Material.BEACON);
         ItemMeta meta = item.getItemMeta();
         
         meta.setDisplayName("§aRespawn Beacon");

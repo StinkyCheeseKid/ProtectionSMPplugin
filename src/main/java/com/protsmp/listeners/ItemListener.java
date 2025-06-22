@@ -11,10 +11,21 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
+import org.bukkit.BanEntry;
+import org.bukkit.BanList;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.meta.SkullMeta;
+import java.util.*;
+import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 
 public class ItemListener implements Listener {
     
     private final ProtSMP plugin;
+    private final Map<UUID, String> pluginBannedPlayers = new HashMap<>(); // uuid -> reason
+    private final Map<UUID, String> pendingUnbans = new HashMap<>(); // uuid -> reason
     
     public ItemListener(ProtSMP plugin) {
         this.plugin = plugin;
@@ -60,6 +71,49 @@ public class ItemListener implements Listener {
                 event.setCancelled(true);
                 useRespawnBeacon(player);
                 break;
+        }
+    }
+    
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event) {
+        if (!(event.getWhoClicked() instanceof Player)) return;
+        Player player = (Player) event.getWhoClicked();
+        String title = event.getView().getTitle();
+        if (title == null || !title.startsWith("§aRespawn Beacon")) return;
+        event.setCancelled(true);
+        ItemStack clicked = event.getCurrentItem();
+        if (clicked == null || clicked.getType() != Material.PLAYER_HEAD) return;
+        if (!(clicked.getItemMeta() instanceof SkullMeta)) return;
+        SkullMeta meta = (SkullMeta) clicked.getItemMeta();
+        if (meta == null || meta.getOwningPlayer() == null) return;
+        OfflinePlayer banned = meta.getOwningPlayer();
+        if (banned == null) return;
+        UUID bannedUUID = banned.getUniqueId();
+        // Unban logic
+        Bukkit.getBanList(BanList.Type.NAME).pardon(banned.getName());
+        // Mark for multiplier reset on next join
+        plugin.getMultiplierManager().setMultiplier(bannedUUID, 0.50);
+        player.sendMessage("§aUnbanned " + banned.getName() + ". Their multiplier will be set to 0.50x on next join.");
+        player.closeInventory();
+    }
+    
+    @EventHandler
+    public void onPlayerPickupItem(PlayerPickupItemEvent event) {
+        Player player = event.getPlayer();
+        ItemStack item = event.getItem().getItemStack();
+        if (plugin.getItemManager().isCustomItem(item) && "mace_of_calamity".equals(plugin.getItemManager().getCustomItemType(item))) {
+            plugin.getMultiplierManager().setMultiplier(player.getUniqueId(), 3.5);
+            plugin.getMultiplierManager().setMultiplierCap(player.getUniqueId(), 3.5);
+        }
+    }
+    
+    @EventHandler
+    public void onPlayerDropItem(PlayerDropItemEvent event) {
+        Player player = event.getPlayer();
+        ItemStack item = event.getItemDrop().getItemStack();
+        if (plugin.getItemManager().isCustomItem(item) && "mace_of_calamity".equals(plugin.getItemManager().getCustomItemType(item))) {
+            plugin.getMultiplierManager().setMultiplier(player.getUniqueId(), 2.0);
+            plugin.getMultiplierManager().setMultiplierCap(player.getUniqueId(), 2.0);
         }
     }
     
@@ -142,7 +196,26 @@ public class ItemListener implements Listener {
     }
     
     private void useRespawnBeacon(Player player) {
-        // TODO: Implement GUI for unbanning players
-        player.sendMessage("§aRespawn Beacon GUI will be implemented soon!");
+        // Find all plugin-banned players (by ban reason)
+        List<OfflinePlayer> bannedPlayers = new ArrayList<>();
+        for (BanEntry entry : Bukkit.getBanList(BanList.Type.NAME).getBanEntries()) {
+            String reason = entry.getReason();
+            if (reason != null && (reason.contains("0.0x multiplier") || reason.contains("Mace of Calamity"))) {
+                OfflinePlayer banned = Bukkit.getOfflinePlayer(entry.getTarget());
+                bannedPlayers.add(banned);
+            }
+        }
+        int size = Math.max(9, ((bannedPlayers.size() + 8) / 9) * 9);
+        Inventory gui = Bukkit.createInventory(null, size, "§aRespawn Beacon - Unban Menu");
+        for (OfflinePlayer banned : bannedPlayers) {
+            ItemStack head = new ItemStack(Material.PLAYER_HEAD);
+            SkullMeta meta = (SkullMeta) head.getItemMeta();
+            meta.setOwningPlayer(banned);
+            meta.setDisplayName("§c" + banned.getName());
+            meta.setLore(Collections.singletonList("§7Click to unban and set to 0.50x"));
+            head.setItemMeta(meta);
+            gui.addItem(head);
+        }
+        player.openInventory(gui);
     }
 } 

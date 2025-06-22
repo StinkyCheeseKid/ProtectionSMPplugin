@@ -71,21 +71,18 @@ public class PlayerListener implements Listener {
         }
         
         // Check for Mace of Calamity in inventory and apply effects
-        boolean hasMace = false;
+        boolean hadMace = false;
         for (ItemStack item : player.getInventory().getContents()) {
             if (item != null && plugin.getItemManager().isCustomItem(item) &&
                 "mace_of_calamity".equals(plugin.getItemManager().getCustomItemType(item))) {
-                hasMace = true;
+                hadMace = true;
                 break;
             }
         }
         
-        if (hasMace) {
-            // Apply Mace of Calamity effects
-            player.setMaxHealth(40.0); // 20 hearts
-            player.setHealth(40.0);
-            plugin.getMultiplierManager().setMultiplier(player.getUniqueId(), 3.5);
-            plugin.getMultiplierManager().setMultiplierCap(player.getUniqueId(), 3.5);
+        if (hadMace) {
+            plugin.getMultiplierManager().setMultiplier(player.getUniqueId(), 2.0);
+            plugin.getMultiplierManager().setMultiplierCap(player.getUniqueId(), 2.0);
         }
     }
 } 
