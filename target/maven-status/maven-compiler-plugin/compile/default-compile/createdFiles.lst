@@ -1,0 +1,15 @@
+com\protsmp\commands\RemoveRunesCommand.class
+com\protsmp\managers\EffectManager.class
+com\protsmp\tasks\ActionBarTask.class
+com\protsmp\commands\EditMultiplierCommand.class
+com\protsmp\listeners\ItemListener.class
+com\protsmp\ProtSMP.class
+com\protsmp\listeners\CraftingListener.class
+com\protsmp\commands\GiveRuneCommand.class
+com\protsmp\listeners\PlayerListener.class
+com\protsmp\managers\ItemManager.class
+com\protsmp\managers\RecipeManager.class
+com\protsmp\commands\ViewMultiplierCommand.class
+com\protsmp\managers\MultiplierManager.class
+com\protsmp\commands\ExtractRuneCommand.class
+com\protsmp\listeners\CombatListener.class

@@ -1,0 +1,38 @@
+name: ProtSMP
+version: 1.0.0
+main: com.protsmp.ProtSMP
+api-version: 1.20
+description: A Minecraft plugin with multiplier system and custom items
+
+commands:
+  giverune:
+    description: Give a rune or custom item to yourself
+    usage: /giverune <type>
+    permission: protsmp.giverune
+  viewmultiplier:
+    description: View a player's multiplier
+    usage: /viewmultiplier <player>
+    permission: protsmp.admin
+  editmultiplier:
+    description: Edit a player's multiplier
+    usage: /editmultiplier <player> <value>
+    permission: protsmp.admin
+  removerunes:
+    description: Remove all rune effects and items from a player
+    usage: /removerunes <player>
+    permission: protsmp.admin
+  extractrune:
+    description: Extract an active rune effect and get the item back
+    usage: /extractrune <strength|heart|power>
+    permission: protsmp.extractrune
+
+permissions:
+  protsmp.giverune:
+    description: Allows giving runes and custom items
+    default: op
+  protsmp.admin:
+    description: Allows admin commands
+    default: op
+  protsmp.extractrune:
+    description: Allows extracting rune effects
+    default: true 
