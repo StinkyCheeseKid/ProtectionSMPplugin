@@ -25,6 +25,10 @@ commands:
     description: Extract an active rune effect and get the item back
     usage: /extractrune <strength|heart|power>
     permission: protsmp.extractrune
+  prot:
+    description: Show the ProtSMP plugin version
+    usage: /prot
+    permission: protsmp.version
 
 permissions:
   protsmp.giverune:
@@ -35,4 +39,7 @@ permissions:
     default: op
   protsmp.extractrune:
     description: Allows extracting rune effects
+    default: true
+  protsmp.version:
+    description: Allows viewing the plugin version
     default: true 

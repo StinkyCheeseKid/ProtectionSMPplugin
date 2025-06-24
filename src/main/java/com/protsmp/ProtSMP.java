@@ -31,6 +31,7 @@ public class ProtSMP extends JavaPlugin {
         getCommand("editmultiplier").setExecutor(new EditMultiplierCommand(this));
         getCommand("removerunes").setExecutor(new RemoveRunesCommand(this));
         getCommand("extractrune").setExecutor(new ExtractRuneCommand(this));
+        getCommand("prot").setExecutor(new ProtVersionCommand(this));
         
         // Register listeners
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);

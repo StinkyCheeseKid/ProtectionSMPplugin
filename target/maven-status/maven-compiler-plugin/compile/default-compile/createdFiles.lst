@@ -6,6 +6,7 @@ com\protsmp\listeners\ItemListener.class
 com\protsmp\ProtSMP.class
 com\protsmp\listeners\CraftingListener.class
 com\protsmp\commands\GiveRuneCommand.class
+com\protsmp\commands\ProtVersionCommand.class
 com\protsmp\listeners\PlayerListener.class
 com\protsmp\managers\ItemManager.class
 com\protsmp\managers\RecipeManager.class
