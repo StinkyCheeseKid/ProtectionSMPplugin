@@ -185,9 +185,9 @@ public class ItemManager {
         );
         meta.setCustomModelData(7);
         meta.setUnbreakable(true);
-        // Add Density X and Wind Burst II (using DURABILITY and KNOCKBACK as placeholders)
+        // Add Density X and Wind Burst III (using DURABILITY and KNOCKBACK as placeholders)
         meta.addEnchant(Enchantment.DURABILITY, 10, true); // Placeholder for Density X
-        meta.addEnchant(Enchantment.KNOCKBACK, 2, true); // Placeholder for Wind Burst II
+        meta.addEnchant(Enchantment.KNOCKBACK, 3, true); // Placeholder for Wind Burst III
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         item.setItemMeta(meta);
         return item;

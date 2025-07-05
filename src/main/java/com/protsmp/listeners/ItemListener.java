@@ -104,6 +104,12 @@ public class ItemListener implements Listener {
         if (plugin.getItemManager().isCustomItem(item) && "mace_of_calamity".equals(plugin.getItemManager().getCustomItemType(item))) {
             plugin.getMultiplierManager().setMultiplier(player.getUniqueId(), 3.5);
             plugin.getMultiplierManager().setMultiplierCap(player.getUniqueId(), 3.5);
+            if (player.getMaxHealth() < 40.0) {
+                player.setMaxHealth(40.0);
+            }
+            if (player.getHealth() < 40.0) {
+                player.setHealth(40.0);
+            }
         }
     }
     
